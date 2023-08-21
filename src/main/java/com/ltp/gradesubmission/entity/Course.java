@@ -3,6 +3,7 @@ package com.ltp.gradesubmission.entity;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,14 +23,17 @@ public class Course {
     private Long id;
 
     @NonNull
+    @NotBlank(message = "Subject cannot be blank")
     @Column(name = "subject", nullable = false)
     private String subject;
 
     @NonNull
+    @NotBlank(message = "Course code cannot be blank")
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
     @NonNull
+    @NotBlank(message = "Description cannot be blank")
     @Column(name = "description", nullable = false)
     private String description;
 
