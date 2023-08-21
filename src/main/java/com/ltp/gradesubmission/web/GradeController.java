@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/grade")
 public class GradeController {
-
+    
     GradeService gradeService;
 
     @GetMapping("/student/{studentId}/course/{courseId}")
@@ -33,14 +33,13 @@ public class GradeController {
     }
 
     @PostMapping("/student/{studentId}/course/{courseId}")
-    public ResponseEntity<Grade> saveGrade(@Valid @RequestBody Grade grade, @PathVariable Long studentId,
-            @PathVariable Long courseId) {
+    public ResponseEntity<Grade> saveGrade(@Valid @RequestBody Grade grade, @PathVariable Long studentId, @PathVariable Long courseId) {
         return new ResponseEntity<>(gradeService.saveGrade(grade, studentId, courseId), HttpStatus.CREATED);
     }
 
+
     @PutMapping("/student/{studentId}/course/{courseId}")
-    public ResponseEntity<Grade> updateGrade(@Valid @RequestBody Grade grade, @PathVariable Long studentId,
-            @PathVariable Long courseId) {
+    public ResponseEntity<Grade> updateGrade(@Valid @RequestBody Grade grade, @PathVariable Long studentId, @PathVariable Long courseId) {
         return new ResponseEntity<>(gradeService.updateGrade(grade.getScore(), studentId, courseId), HttpStatus.OK);
     }
 

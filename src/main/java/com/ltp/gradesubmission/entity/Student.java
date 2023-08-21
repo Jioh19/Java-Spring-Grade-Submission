@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -31,13 +32,13 @@ public class Student {
     @Column(name = "id")
     private Long id;
 
-    @NonNull
     @NotBlank(message = "Name cannot be blank")
+    @NonNull
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NonNull
     @Past(message = "The birth date must be in the past")
+    @NonNull
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
@@ -45,4 +46,7 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Grade> grades;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "students")
+    private List<Course> courses;
 }

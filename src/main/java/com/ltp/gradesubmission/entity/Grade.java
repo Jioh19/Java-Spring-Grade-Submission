@@ -19,10 +19,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "grade", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "student_id", "course_id" })
-})
-
+@Table(name = "grade", uniqueConstraints={
+    @UniqueConstraint(columnNames = {"student_id", "course_id"})
+}) 
 public class Grade {
 
     @Id
@@ -30,8 +29,8 @@ public class Grade {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "score", nullable = false)
     @Score
+    @Column(name = "score", nullable = false)
     private String score;
 
     @ManyToOne(optional = false)
@@ -41,5 +40,5 @@ public class Grade {
     @ManyToOne(optional = false)
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     private Course course;
-
+    
 }
