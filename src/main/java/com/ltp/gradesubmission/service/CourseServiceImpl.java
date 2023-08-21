@@ -42,7 +42,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course addStudentToCourse(Long studentId, Long courseId) {
-
         Course course = getCourse(courseId);
         Optional<Student> student = studentRepository.findById(studentId);
         Student unwrappedStudent = StudentServiceImpl.unwrapStudent(student, studentId);
