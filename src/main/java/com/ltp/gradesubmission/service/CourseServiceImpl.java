@@ -2,6 +2,7 @@ package com.ltp.gradesubmission.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.ltp.gradesubmission.entity.Course;
 import com.ltp.gradesubmission.entity.Student;
@@ -51,9 +52,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Student> getEnrolledStudents(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+    public Set<Student> getEnrolledStudents(Long id) {
+        Course course = getCourse(id);
+        return course.getStudents();
     }
 
     static Course unwrapCourse(Optional<Course> entity, Long id) {

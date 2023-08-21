@@ -1,6 +1,7 @@
 package com.ltp.gradesubmission.web;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -49,8 +50,8 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/courses")
-    public ResponseEntity<List<Course>> getEnrolledCourses(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Set<Course>> getEnrolledCourses(@PathVariable Long id) {
+        return new ResponseEntity<>(studentService.getEnrolledCourses(id), HttpStatus.OK);
     }
 
 }
