@@ -19,7 +19,6 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ public class Course {
 
     @NotBlank(message = "Course code cannot be blank")
     @NonNull
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false)
     private String code;
 
     @NotBlank(message = "Description cannot be blank")
@@ -53,7 +52,11 @@ public class Course {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
+    @JoinTable(
+        name = "course_student",
+        joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id")
+    )
     private Set<Student> students;
 
 }
