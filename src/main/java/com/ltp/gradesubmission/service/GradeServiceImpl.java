@@ -19,22 +19,23 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class GradeServiceImpl implements GradeService {
-    
+
     private GradeRepository gradeRepository;
     private StudentRepository studentRepository;
     private CourseRepository courseRepository;
-    
+
     @Override
     public Grade getGrade(Long studentId, Long courseId) {
-         Optional<Grade> grade = gradeRepository.findByStudentIdAndCourseId(studentId, courseId);
-         return unwrapGrade(grade, studentId, courseId);
+        Optional<Grade> grade = gradeRepository.findByStudentIdAndCourseId(studentId, courseId);
+        return unwrapGrade(grade, studentId, courseId);
     }
 
     @Override
     public Grade saveGrade(Grade grade, Long studentId, Long courseId) {
         Student student = StudentServiceImpl.unwrapStudent(studentRepository.findById(studentId), studentId);
         Course course = CourseServiceImpl.unwrapCourse(courseRepository.findById(courseId), courseId);
-        if (!student.getCourses().contains(course)) throw new StudentNotEnrolledException(studentId, courseId);
+        if (!student.getCourses().contains(course))
+            throw new StudentNotEnrolledException(studentId, courseId);
         grade.setStudent(student);
         grade.setCourse(course);
         return gradeRepository.save(grade);
@@ -69,8 +70,10 @@ public class GradeServiceImpl implements GradeService {
     }
 
     static Grade unwrapGrade(Optional<Grade> entity, Long studentId, Long courseId) {
-        if (entity.isPresent()) return entity.get();
-        else throw new GradeNotFoundException(studentId, courseId);
+        if (entity.isPresent())
+            return entity.get();
+        else
+            throw new GradeNotFoundException(studentId, courseId);
     }
 
 }
