@@ -2,8 +2,14 @@ package com.ltp.gradesubmission.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.ltp.gradesubmission.security.filter.AuthenticationFilter;
+import com.ltp.gradesubmission.security.filter.ExceptionHandlerFilter;
+import com.ltp.gradesubmission.security.manager.CustomAuthenticationManager;
+
 import lombok.AllArgsConstructor;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,25 +18,32 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @AllArgsConstructor
 public class SecurityConfig {
 
+    CustomAuthenticationManager customAuthenticationManager;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(customAuthenticationManager);
+        authenticationFilter.setFilterProcessesUrl("/authenticate");
+
         http
                 .headers(headers -> headers.frameOptions().disable())
                 .csrf(csrf -> {
                     try {
                         csrf.disable()
                                 .authorizeHttpRequests(requests -> requests
-                                        .antMatchers("/h2/**").permitAll() // New Line: allows us to access the h2
-                                                                           // console without the need to authenticate.
-                                                                           // ' ** ' instead of ' * ' because multiple
-                                                                           // path levels will follow /h2.
-                                        .anyRequest().authenticated());
+                                        .antMatchers("/h2/**").permitAll()
+                                        .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
+                                        .anyRequest().authenticated()
+                                        .and()
+                                        .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
+                                        .addFilter(authenticationFilter))
+                                .sessionManagement(management -> management
+                                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                })
-                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                });
         return http.build();
     }
 
